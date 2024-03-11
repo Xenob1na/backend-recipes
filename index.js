@@ -3,17 +3,30 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import multer from "multer";
+
+import authRouter from "./routers/auth.router.js";
+import recipeRouter from "./routers/recipe.router.js";
+
 
 import "dotenv/config";
 
 const app = express();
 
 // Middleware
-app.use(express.json());
-app.use(morgan("dev"));
+
 app.use(cors());
+app.use('/uploads', express.static('uploads'));
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use("/api/auth", authRouter);
+app.use("/api/recipe", recipeRouter);
+
+
+
 app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",
